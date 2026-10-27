@@ -262,3 +262,13 @@ CREATE TABLE IF NOT EXISTS familialm.mural_conquistas (
 -- Garantir concessões nas tabelas recém criadas
 GRANT ALL ON ALL TABLES IN SCHEMA familialm TO anon, authenticated, service_role;
 GRANT ALL ON ALL SEQUENCES IN SCHEMA familialm TO anon, authenticated, service_role;
+
+-- ====================================================================================
+-- 9. BUCKETS DE STORAGE (Prefixados para isolamento)
+-- ====================================================================================
+INSERT INTO storage.buckets (id, name, public) VALUES
+    ('familia-os-recibos', 'familia-os-recibos', false),
+    ('familia-os-documentos', 'familia-os-documentos', false),
+    ('familia-os-fotos', 'familia-os-fotos', true)
+ON CONFLICT (id) DO NOTHING;
+
