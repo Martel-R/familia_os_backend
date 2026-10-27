@@ -51,6 +51,15 @@ EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
 
+CREATE TABLE IF NOT EXISTS familialm.contas_bancarias (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    nome VARCHAR(100) NOT NULL,
+    instituicao VARCHAR(100),
+    saldo_atual DECIMAL(10,2) DEFAULT 0.00,
+    cor VARCHAR(20) DEFAULT '#4f46e5',
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS familialm.categorias_financeiras (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(100) NOT NULL,
@@ -58,10 +67,21 @@ CREATE TABLE IF NOT EXISTS familialm.categorias_financeiras (
     cor VARCHAR(20)
 );
 
+CREATE TABLE IF NOT EXISTS familialm.cofrinhos (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    nome VARCHAR(255) NOT NULL,
+    meta_valor DECIMAL(10,2) NOT NULL,
+    saldo_atual DECIMAL(10,2) DEFAULT 0.00,
+    data_limite DATE,
+    icone VARCHAR(50)
+);
+
 CREATE TABLE IF NOT EXISTS familialm.transacoes_financeiras (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     usuario_id UUID REFERENCES familialm.usuarios(id),
     categoria_id UUID REFERENCES familialm.categorias_financeiras(id),
+    conta_id UUID REFERENCES familialm.contas_bancarias(id) ON DELETE SET NULL,
+    cofrinho_id UUID REFERENCES familialm.cofrinhos(id) ON DELETE SET NULL,
     tipo familialm.tipo_transacao NOT NULL,
     descricao VARCHAR(255) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
@@ -72,13 +92,14 @@ CREATE TABLE IF NOT EXISTS familialm.transacoes_financeiras (
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS familialm.cofrinhos (
+CREATE TABLE IF NOT EXISTS familialm.cofrinhos_aportes (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    nome VARCHAR(255) NOT NULL,
-    meta_valor DECIMAL(10,2) NOT NULL,
-    saldo_atual DECIMAL(10,2) DEFAULT 0.00,
-    data_limite DATE,
-    icone VARCHAR(50)
+    cofrinho_id UUID REFERENCES familialm.cofrinhos(id) ON DELETE CASCADE,
+    conta_id UUID REFERENCES familialm.contas_bancarias(id) ON DELETE SET NULL,
+    tipo VARCHAR(20) NOT NULL, -- 'deposito' ou 'resgate'
+    valor DECIMAL(10,2) NOT NULL,
+    descricao VARCHAR(255),
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- ====================================================================================
