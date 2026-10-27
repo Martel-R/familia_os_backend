@@ -272,3 +272,15 @@ INSERT INTO storage.buckets (id, name, public) VALUES
     ('familia-os-fotos', 'familia-os-fotos', true)
 ON CONFLICT (id) DO NOTHING;
 
+DO $$ 
+BEGIN
+    CREATE POLICY "Familia OS: Acesso aos buckets do projeto"
+    ON storage.objects
+    FOR ALL
+    TO anon, authenticated
+    USING (bucket_id IN ('familia-os-recibos', 'familia-os-documentos', 'familia-os-fotos'))
+    WITH CHECK (bucket_id IN ('familia-os-recibos', 'familia-os-documentos', 'familia-os-fotos'));
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
