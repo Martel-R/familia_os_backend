@@ -159,6 +159,8 @@ CREATE TABLE IF NOT EXISTS familialm.tarefas_rotinas (
     titulo VARCHAR(255) NOT NULL,
     responsavel_id UUID REFERENCES familialm.usuarios(id),
     recorrencia familialm.recorrencia_tarefa NOT NULL,
+    dias_semana VARCHAR(100), -- Ex: Segunda, Quarta, Sexta (quando semanal)
+    dia_mes INT, -- Ex: 5, 10, 20 (quando mensal)
     moedas_recompensa INT DEFAULT 0,
     data_limite TIMESTAMP WITH TIME ZONE,
     esta_concluida BOOLEAN DEFAULT FALSE,
