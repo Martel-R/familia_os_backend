@@ -76,12 +76,28 @@ CREATE TABLE IF NOT EXISTS familialm.cofrinhos (
     icone VARCHAR(50)
 );
 
+CREATE TABLE IF NOT EXISTS familialm.despesas_recorrentes (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    nome VARCHAR(100) NOT NULL,
+    tipo VARCHAR(50) NOT NULL DEFAULT 'emprestimo', -- 'emprestimo', 'financiamento', 'despesa_fixa', 'assinatura'
+    valor_parcela DECIMAL(10,2) NOT NULL,
+    dia_vencimento INT NOT NULL CHECK (dia_vencimento BETWEEN 1 AND 31),
+    total_parcelas INT,
+    parcelas_pagas INT DEFAULT 0,
+    saldo_devedor_total DECIMAL(10,2),
+    conta_padrao_id UUID REFERENCES familialm.contas_bancarias(id) ON DELETE SET NULL,
+    palavras_chave_extrato TEXT,
+    ativo BOOLEAN DEFAULT TRUE,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS familialm.transacoes_financeiras (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     usuario_id UUID REFERENCES familialm.usuarios(id),
     categoria_id UUID REFERENCES familialm.categorias_financeiras(id),
     conta_id UUID REFERENCES familialm.contas_bancarias(id) ON DELETE SET NULL,
     cofrinho_id UUID REFERENCES familialm.cofrinhos(id) ON DELETE SET NULL,
+    recorrencia_id UUID REFERENCES familialm.despesas_recorrentes(id) ON DELETE SET NULL,
     tipo familialm.tipo_transacao NOT NULL,
     descricao VARCHAR(255) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
