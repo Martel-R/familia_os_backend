@@ -307,6 +307,16 @@ CREATE TABLE IF NOT EXISTS familialm.saude_fichas_medicas (
     numero_plano_saude VARCHAR(50)
 );
 
+CREATE TABLE IF NOT EXISTS familialm.saude_medicamentos (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    usuario_id UUID REFERENCES familialm.usuarios(id) ON DELETE CASCADE,
+    nome_remedio VARCHAR(255) NOT NULL,
+    dosagem VARCHAR(100) NOT NULL,
+    horario VARCHAR(50) NOT NULL,
+    foi_tomado_hoje BOOLEAN DEFAULT FALSE,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- ====================================================================================
 -- 7. COMPRAS INTELIGENTES (OCR / IA)
 -- ====================================================================================
@@ -337,7 +347,27 @@ CREATE TABLE IF NOT EXISTS familialm.mural_conquistas (
     descricao TEXT,
     usuario_id UUID REFERENCES familialm.usuarios(id) ON DELETE SET NULL,
     data_conquista DATE NOT NULL,
-    caminho_foto TEXT
+    caminho_foto TEXT,
+    total_reacoes INT DEFAULT 0,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS familialm.mural_fotos (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    titulo VARCHAR(255) NOT NULL,
+    autor_id UUID REFERENCES familialm.usuarios(id) ON DELETE CASCADE,
+    eh_privado BOOLEAN DEFAULT FALSE,
+    caminho_imagem TEXT NOT NULL,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ====================================================================================
+-- 9. CONFIGURAÇÕES DA CASA
+-- ====================================================================================
+CREATE TABLE IF NOT EXISTS familialm.configuracoes_casa (
+    id VARCHAR(50) PRIMARY KEY,
+    valor JSONB NOT NULL,
+    atualizado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- Garantir concessões nas tabelas recém criadas
