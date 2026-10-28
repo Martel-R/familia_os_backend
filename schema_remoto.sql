@@ -204,6 +204,7 @@ CREATE TABLE IF NOT EXISTS familialm.tarefas_rotinas (
     moedas_recompensa INT DEFAULT 0,
     data_limite TIMESTAMP WITH TIME ZONE,
     esta_concluida BOOLEAN DEFAULT FALSE,
+    ultima_conclusao_data DATE,
     atualizado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
