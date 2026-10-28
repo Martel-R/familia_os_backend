@@ -128,8 +128,13 @@ CREATE TABLE IF NOT EXISTS familialm.eventos (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(255) NOT NULL,
     data_evento TIMESTAMP WITH TIME ZONE NOT NULL,
+    data_fim TIMESTAMP WITH TIME ZONE,
+    tipo VARCHAR(50) DEFAULT 'outro', -- 'aniversario', 'viagem', 'ferias', 'churrasco', 'reuniao', 'outro'
+    local VARCHAR(255),
+    destino VARCHAR(255),
     descricao TEXT,
     orcamento_estimado DECIMAL(10,2),
+    roteiro_viagem JSONB,
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -145,7 +150,20 @@ CREATE TABLE IF NOT EXISTS familialm.convidados (
     nome VARCHAR(255) NOT NULL,
     telefone VARCHAR(20),
     status familialm.status_rsvp DEFAULT 'pendente',
-    restricoes_alimentares TEXT
+    adultos INT DEFAULT 1,
+    criancas INT DEFAULT 0,
+    restricoes_alimentares TEXT,
+    itens_que_leva TEXT
+);
+
+CREATE TABLE IF NOT EXISTS familialm.eventos_tarefas (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    evento_id UUID REFERENCES familialm.eventos(id) ON DELETE CASCADE,
+    titulo VARCHAR(255) NOT NULL,
+    responsavel_id UUID REFERENCES familialm.usuarios(id) ON DELETE SET NULL,
+    concluida BOOLEAN DEFAULT FALSE,
+    prazo DATE,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 DO $$ BEGIN
@@ -161,6 +179,8 @@ CREATE TABLE IF NOT EXISTS familialm.cotacoes (
     fornecedor VARCHAR(255) NOT NULL,
     valor DECIMAL(10,2) NOT NULL,
     status familialm.status_cotacao DEFAULT 'em_analise',
+    pago BOOLEAN DEFAULT FALSE,
+    categoria VARCHAR(50) DEFAULT 'geral',
     link_anexo TEXT,
     observacoes TEXT
 );
