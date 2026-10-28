@@ -28,11 +28,14 @@ EXCEPTION
 END $$;
 
 CREATE TABLE IF NOT EXISTS familialm.usuarios (
-    id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(255) NOT NULL,
     perfil familialm.tipo_perfil NOT NULL,
     saldo_moedas INT DEFAULT 0,
     avatar_url TEXT,
+    auth_user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    ativo BOOLEAN DEFAULT TRUE,
+    cor_tema VARCHAR(20) DEFAULT '#4f46e5',
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -209,7 +212,19 @@ CREATE TABLE IF NOT EXISTS familialm.loja_privilegios (
     titulo VARCHAR(255) NOT NULL,
     custo_moedas INT NOT NULL,
     icone VARCHAR(50),
-    estoque_disponivel INT
+    estoque_disponivel INT,
+    descricao TEXT,
+    ativo BOOLEAN DEFAULT TRUE,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS familialm.resgates_privilegios (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    privilegio_id UUID REFERENCES familialm.loja_privilegios(id) ON DELETE CASCADE,
+    usuario_id UUID REFERENCES familialm.usuarios(id) ON DELETE CASCADE,
+    moedas_gastas INT NOT NULL,
+    status VARCHAR(50) DEFAULT 'aprovado',
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 -- ====================================================================================
