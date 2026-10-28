@@ -256,9 +256,14 @@ CREATE TABLE IF NOT EXISTS familialm.agenda_contatos (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(255) NOT NULL,
     especialidade VARCHAR(100),
-    telefone VARCHAR(20) NOT NULL,
+    telefone VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(255),
+    foto_uri TEXT,
     eh_emergencia BOOLEAN DEFAULT FALSE,
-    observacoes TEXT
+    origem VARCHAR(50) DEFAULT 'agenda_telefone',
+    observacoes TEXT,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    atualizado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS familialm.inventario_itens (
