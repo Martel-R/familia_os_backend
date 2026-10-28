@@ -198,6 +198,7 @@ CREATE TABLE IF NOT EXISTS familialm.tarefas_rotinas (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     titulo VARCHAR(255) NOT NULL,
     responsavel_id UUID REFERENCES familialm.usuarios(id),
+    aberta_para_todos BOOLEAN DEFAULT FALSE,
     recorrencia familialm.recorrencia_tarefa NOT NULL,
     dias_semana VARCHAR(100), -- Ex: Segunda, Quarta, Sexta (quando semanal)
     dia_mes INT, -- Ex: 5, 10, 20 (quando mensal)
