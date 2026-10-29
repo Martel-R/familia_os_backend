@@ -358,10 +358,14 @@ CREATE TABLE IF NOT EXISTS familialm.saude_consultas_exames (
     tipo VARCHAR(50) NOT NULL, -- 'consulta' ou 'exame'
     titulo VARCHAR(255) NOT NULL,
     especialista_ou_clinica VARCHAR(255),
-    data_agendada TIMESTAMP WITH TIME ZONE NOT NULL,
+    data_agendada TIMESTAMP WITH TIME ZONE,
     data_retorno DATE,
     observacoes TEXT,
+    resultado TEXT,
     link_anexo TEXT,
+    status VARCHAR(50) DEFAULT 'agendado', -- 'a_agendar', 'agendado', 'concluido', 'cancelado'
+    contato_id UUID REFERENCES familialm.agenda_contatos(id) ON DELETE SET NULL,
+    evento_id UUID REFERENCES familialm.eventos(id) ON DELETE SET NULL,
     concluido BOOLEAN DEFAULT FALSE,
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
