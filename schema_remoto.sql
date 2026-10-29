@@ -271,8 +271,11 @@ CREATE TABLE IF NOT EXISTS familialm.resgates_privilegios (
 CREATE TABLE IF NOT EXISTS familialm.agenda_contatos (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(255) NOT NULL,
+    categoria VARCHAR(50) DEFAULT 'amigos', -- 'familia', 'amigos', 'medicos', 'servicos', 'apoio'
     especialidade VARCHAR(100),
-    telefone VARCHAR(20) NOT NULL UNIQUE,
+    membro_id UUID REFERENCES familialm.usuarios(id) ON DELETE SET NULL,
+    grau_parentesco VARCHAR(50),
+    telefone VARCHAR(50) NOT NULL,
     email VARCHAR(255),
     foto_uri TEXT,
     eh_emergencia BOOLEAN DEFAULT FALSE,
