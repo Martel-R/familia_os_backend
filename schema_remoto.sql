@@ -124,6 +124,19 @@ CREATE TABLE IF NOT EXISTS familialm.cofrinhos_aportes (
 -- ====================================================================================
 -- 2. PLANEJAMENTO DE EVENTOS & COTAÇÕES
 -- ====================================================================================
+CREATE TABLE IF NOT EXISTS familialm.integracoes_google (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    usuario_id UUID REFERENCES familialm.usuarios(id) ON DELETE CASCADE,
+    email VARCHAR(255) NOT NULL,
+    access_token TEXT NOT NULL,
+    refresh_token TEXT,
+    token_expires_at TIMESTAMP WITH TIME ZONE,
+    calendar_id VARCHAR(255) DEFAULT 'primary',
+    ativo BOOLEAN DEFAULT TRUE,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    atualizado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS familialm.eventos (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     nome VARCHAR(255) NOT NULL,
@@ -135,6 +148,8 @@ CREATE TABLE IF NOT EXISTS familialm.eventos (
     descricao TEXT,
     orcamento_estimado DECIMAL(10,2),
     roteiro_viagem JSONB,
+    google_event_id VARCHAR(255),
+    sincronizado_google BOOLEAN DEFAULT FALSE,
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 

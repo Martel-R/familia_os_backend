@@ -1,1 +1,0 @@
-INSERT INTO familialm.configuracoes_casa (id, valor) VALUES ('WIFI_PRINCIPAL', '{"nomeRedeSsid":"Familia_OS_5G","senhaRede":"FamiliaSegura2026","tipoSeguranca":"WPA2/WPA3","ehRedeVisitantes":false}'::jsonb) ON CONFLICT (id) DO NOTHING;
