@@ -323,7 +323,10 @@ CREATE TABLE IF NOT EXISTS familialm.saude_fichas_medicas (
     numero_plano_saude VARCHAR(100),
     carteirinha_plano_url TEXT,
     numero_plano_odontologico VARCHAR(100),
-    carteirinha_odonto_url TEXT
+    carteirinha_odonto_url TEXT,
+    resumo_clinico_ia TEXT,
+    orientacoes_medico_ia TEXT,
+    atualizado_ia_em TIMESTAMP WITH TIME ZONE
 );
 
 CREATE TABLE IF NOT EXISTS familialm.saude_medicamentos (
