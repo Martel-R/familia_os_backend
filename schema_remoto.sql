@@ -169,7 +169,11 @@ CREATE TABLE IF NOT EXISTS familialm.convidados (
     adultos INT DEFAULT 1,
     criancas INT DEFAULT 0,
     restricoes_alimentares TEXT,
-    itens_que_leva TEXT
+    itens_que_leva TEXT,
+    convite_enviado_em TIMESTAMP WITH TIME ZONE,
+    status_envio VARCHAR(50) DEFAULT 'nao_enviado',
+    resposta_texto TEXT,
+    mensagem_id VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS familialm.eventos_tarefas (
