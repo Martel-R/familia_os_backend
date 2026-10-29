@@ -332,6 +332,45 @@ CREATE TABLE IF NOT EXISTS familialm.saude_medicamentos (
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS familialm.saude_vacinacao (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    usuario_id UUID REFERENCES familialm.usuarios(id) ON DELETE CASCADE,
+    nome_vacina VARCHAR(255) NOT NULL,
+    dose VARCHAR(50) DEFAULT '1ª Dose',
+    data_aplicacao DATE NOT NULL,
+    data_proxima_dose DATE,
+    lote VARCHAR(100),
+    local_aplicacao VARCHAR(255),
+    observacoes TEXT,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS familialm.saude_consultas_exames (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    usuario_id UUID REFERENCES familialm.usuarios(id) ON DELETE CASCADE,
+    tipo VARCHAR(50) NOT NULL, -- 'consulta' ou 'exame'
+    titulo VARCHAR(255) NOT NULL,
+    especialista_ou_clinica VARCHAR(255),
+    data_agendada TIMESTAMP WITH TIME ZONE NOT NULL,
+    data_retorno DATE,
+    observacoes TEXT,
+    link_anexo TEXT,
+    concluido BOOLEAN DEFAULT FALSE,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS familialm.saude_metricas_vitais (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    usuario_id UUID REFERENCES familialm.usuarios(id) ON DELETE CASCADE,
+    tipo_metrica VARCHAR(50) NOT NULL, -- 'pressao', 'glicemia', 'peso', 'altura', 'temperatura'
+    valor_principal DECIMAL(8,2) NOT NULL,
+    valor_secundario DECIMAL(8,2),
+    unidade VARCHAR(30) NOT NULL,
+    observacao VARCHAR(255),
+    data_medicao TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+    criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- ====================================================================================
 -- 7. COMPRAS INTELIGENTES (OCR / IA)
 -- ====================================================================================
