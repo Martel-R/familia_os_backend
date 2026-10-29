@@ -320,7 +320,10 @@ CREATE TABLE IF NOT EXISTS familialm.saude_fichas_medicas (
     tipo_sanguineo VARCHAR(5),
     alergias TEXT,
     medicamentos_uso_continuo TEXT,
-    numero_plano_saude VARCHAR(50)
+    numero_plano_saude VARCHAR(100),
+    carteirinha_plano_url TEXT,
+    numero_plano_odontologico VARCHAR(100),
+    carteirinha_odonto_url TEXT
 );
 
 CREATE TABLE IF NOT EXISTS familialm.saude_medicamentos (
