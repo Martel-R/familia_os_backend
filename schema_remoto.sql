@@ -310,6 +310,7 @@ CREATE TABLE IF NOT EXISTS familialm.saude_checkins (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     usuario_id UUID REFERENCES familialm.usuarios(id) ON DELETE CASCADE,
     nivel_humor INT CHECK (nivel_humor BETWEEN 1 AND 5),
+    motivo TEXT,
     notas_diario TEXT,
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
