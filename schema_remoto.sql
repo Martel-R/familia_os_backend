@@ -108,6 +108,7 @@ CREATE TABLE IF NOT EXISTS familialm.transacoes_financeiras (
     data_pagamento DATE,
     status familialm.status_pagamento DEFAULT 'pendente',
     observacoes TEXT,
+    comprovante_url TEXT,
     criado_em TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -432,8 +433,8 @@ GRANT ALL ON ALL SEQUENCES IN SCHEMA familialm TO anon, authenticated, service_r
 -- 9. BUCKETS DE STORAGE (Prefixados para isolamento)
 -- ====================================================================================
 INSERT INTO storage.buckets (id, name, public) VALUES
-    ('familia-os-recibos', 'familia-os-recibos', false),
-    ('familia-os-documentos', 'familia-os-documentos', false),
+    ('familia-os-recibos', 'familia-os-recibos', true),
+    ('familia-os-documentos', 'familia-os-documentos', true),
     ('familia-os-fotos', 'familia-os-fotos', true)
 ON CONFLICT (id) DO NOTHING;
 
